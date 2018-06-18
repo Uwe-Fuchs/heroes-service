@@ -93,6 +93,12 @@
         </dependency>
         -->
 
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>9.4.11.v20180605</version>
+        </dependency>
+
     </dependencies>
 
     <properties>
