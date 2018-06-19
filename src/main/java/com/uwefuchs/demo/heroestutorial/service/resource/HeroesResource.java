@@ -1,4 +1,4 @@
-package com.uwefuchs.demo.heroestutorial.service;
+package com.uwefuchs.demo.heroestutorial.service.resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,38 +18,40 @@ import com.uwefuchs.demo.heroestutorial.service.model.Hero;
 @Path("heroes")
 public class HeroesResource {
 
-    private final Logger logger = LoggerFactory.getLogger(Hero.class);
-    private final Map<Integer, Hero> heroes = new LinkedHashMap<>(10);
+    private static final Map<Integer, Hero> HEROES_MAP = new LinkedHashMap<>();    
+    private static final Logger LOG = LoggerFactory.getLogger(Hero.class);
 
-    public HeroesResource() {
+    static {
         buildHeroesMap();
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Collection<Hero> getAllHeroes() {
-        logger.debug("delivering all heroes...");
-        return heroes.values();
+        LOG.debug("delivering all heroes...");
+        return HEROES_MAP.values();
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Hero findHero(@PathParam("id") Integer id) {
-        logger.debug("delivering hero with id [{}]...", id);
-        return heroes.get(id);
+        LOG.debug("delivering hero with id [{}]...", id);
+        return HEROES_MAP.get(id);
     }
 
-    private void buildHeroesMap() {
-        heroes.put(11, new Hero(11, "Mr. Nice"));
-        heroes.put(12, new Hero(12, "Narco"));
-        heroes.put(13, new Hero(13, "Bombasto"));
-        heroes.put(14, new Hero(14, "Celeritas"));
-        heroes.put(15, new Hero(15, "Magneta"));
-        heroes.put(16, new Hero(16, "RubberMan"));
-        heroes.put(17, new Hero(17, "Dynama"));
-        heroes.put(18, new Hero(18, "Dr IQ"));
-        heroes.put(19, new Hero(19, "Magma"));
-        heroes.put(20, new Hero(20, "Tornado"));
+    private static void buildHeroesMap() {
+        LOG.debug("building heroes-map...");
+        HEROES_MAP.put(11, new Hero(11, "Mr. Nice"));
+        HEROES_MAP.put(12, new Hero(12, "Narco"));
+        HEROES_MAP.put(13, new Hero(13, "Bombasto"));
+        HEROES_MAP.put(14, new Hero(14, "Celeritas"));
+        HEROES_MAP.put(15, new Hero(15, "Magneta"));
+        HEROES_MAP.put(16, new Hero(16, "RubberMan"));
+        HEROES_MAP.put(17, new Hero(17, "Dynama"));
+        HEROES_MAP.put(18, new Hero(18, "Dr IQ"));
+        HEROES_MAP.put(19, new Hero(19, "Magma"));
+        HEROES_MAP.put(20, new Hero(20, "Tornado"));
+        LOG.debug("... finished!");
     }
 }
