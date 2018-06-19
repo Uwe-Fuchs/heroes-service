@@ -10,11 +10,15 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.uwefuchs.demo.heroestutorial.service.model.Hero;
 
 @Path("heroes")
 public class HeroesResource {
 
+    private final Logger logger = LoggerFactory.getLogger(Hero.class);
     private final Map<Integer, Hero> heroes = new LinkedHashMap<>(10);
 
     public HeroesResource() {
@@ -24,6 +28,7 @@ public class HeroesResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Collection<Hero> getAllHeroes() {
+        logger.debug("delivering all heroes...");
         return heroes.values();
     }
 
@@ -31,6 +36,7 @@ public class HeroesResource {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Hero findHero(@PathParam("id") Integer id) {
+        logger.debug("delivering hero with id [{}]...", id);
         return heroes.get(id);
     }
 
