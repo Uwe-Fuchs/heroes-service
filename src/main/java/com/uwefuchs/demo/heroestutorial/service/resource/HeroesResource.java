@@ -1,9 +1,12 @@
 package com.uwefuchs.demo.heroestutorial.service.resource;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.PathParam;
 
 import java.util.Collection;
@@ -36,8 +39,26 @@ public class HeroesResource {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Hero findHero(@PathParam("id") Integer id) {
+    	if (!HEROES_MAP.containsKey(id)) {
+    		throw new WebApplicationException(String.format("no hero found with id [%d]", id), 404);
+    	}
+    	
         LOG.debug("delivering hero with id [{}]...", id);
         return HEROES_MAP.get(id);
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response deleteHero(@PathParam("id") Integer id) {
+    	if (!HEROES_MAP.containsKey(id)) {
+    		throw new WebApplicationException(String.format("no hero found with id [%d]", id), 404);
+    	}
+    	
+        LOG.debug("deleting hero with id [{}]...", id);        
+        HEROES_MAP.remove(id);
+        LOG.info("hero with id [{}] deleted.");
+        
+        return Response.ok().build();
     }
 
     private static void buildHeroesMap() {
