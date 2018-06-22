@@ -26,11 +26,15 @@
         </init-param>
         <init-param>
             <param-name>allowedMethods</param-name>
-            <param-value>GET,POST,PUT,DELETE,HEAD</param-value>
+            <param-value>GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD</param-value>
         </init-param>
         <init-param>
             <param-name>allowedHeaders</param-name>
-            <param-value>X-Requested-With,Content-Type,Accept,Origin</param-value>
+            <param-value>X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept</param-value>
+        </init-param>
+        <init-param>
+            <param-name>maxAge</param-name>
+            <param-value>1728000</param-value>
         </init-param>
     </filter>
     <filter-mapping>

@@ -1,7 +1,9 @@
 package com.uwefuchs.demo.heroestutorial.service.resource;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -29,7 +31,7 @@ public class HeroesResource {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public Collection<Hero> getAllHeroes() {
         LOG.debug("delivering all heroes...");
         return HEROES_MAP.values();
@@ -37,7 +39,7 @@ public class HeroesResource {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public Hero findHero(@PathParam("id") Integer id) {
     	if (!HEROES_MAP.containsKey(id)) {
     		throw new WebApplicationException(String.format("no hero found with id [%d]", id), 404);
@@ -45,6 +47,22 @@ public class HeroesResource {
     	
         LOG.debug("delivering hero with id [{}]...", id);
         return HEROES_MAP.get(id);
+    }
+
+    @PUT
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateHero(Hero hero, @PathParam("id") Integer id) {
+    	if (!HEROES_MAP.containsKey(id)) {
+    		throw new WebApplicationException(String.format("no hero found with id [%d]", id), 404);
+    	}
+    	
+        LOG.debug("updating hero with id [{}]...", id);        
+        HEROES_MAP.put(id, hero);
+        LOG.info("hero with id [{}] updated.", id);
+        
+        return Response.ok().build();
     }
 
     @DELETE
@@ -56,7 +74,7 @@ public class HeroesResource {
     	
         LOG.debug("deleting hero with id [{}]...", id);        
         HEROES_MAP.remove(id);
-        LOG.info("hero with id [{}] deleted.");
+        LOG.info("hero with id [{}] deleted.", id);
         
         return Response.ok().build();
     }
