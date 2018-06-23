@@ -1,34 +1,33 @@
 package com.uwefuchs.demo.heroestutorial.service.resource;
 
+import java.util.Collection;
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.PathParam;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uwefuchs.demo.heroestutorial.service.model.Hero;
+import com.uwefuchs.demo.heroestutorial.service.service.HeroesCreatingService;
 
 @Path("heroes")
 public class HeroesResource {
-
-    private static final Map<Integer, Hero> HEROES_MAP = new LinkedHashMap<>();    
     private static final Logger LOG = LoggerFactory.getLogger(Hero.class);
-
-    static {
-        buildHeroesMap();
-    }
+    private static final Map<Integer, Hero> HEROES_MAP = HeroesCreatingService.buildHeroesMap();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,6 +63,27 @@ public class HeroesResource {
         
         return Response.ok().build();
     }
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createHero(@Context UriInfo uriInfo, Hero hero) {
+    	if (hero.getName() == null || "".equals(hero.getName())) {
+    		throw new WebApplicationException("heroes must have a name!", 400);
+    	}
+    	
+    	Hero newHero = new Hero(HeroesCreatingService.getNextId(), hero.getName());
+    	
+        LOG.debug("creating hero with id [{}] and name [{}]...", newHero.getId(), newHero.getName());        
+        HEROES_MAP.put(newHero.getId(), newHero);
+        LOG.info("hero [{}] successfully created.", newHero.getName());
+        
+		UriBuilder uriBuilder = uriInfo.getBaseUriBuilder()
+				.path("heroes")
+				.path(Integer.toString(newHero.getId()));
+        
+        return Response.created(uriBuilder.build()).build();
+    }
 
     @DELETE
     @Path("{id}")
@@ -77,20 +97,5 @@ public class HeroesResource {
         LOG.info("hero with id [{}] deleted.", id);
         
         return Response.ok().build();
-    }
-
-    private static void buildHeroesMap() {
-        LOG.debug("building heroes-map...");
-        HEROES_MAP.put(11, new Hero(11, "Mr. Nice"));
-        HEROES_MAP.put(12, new Hero(12, "Narco"));
-        HEROES_MAP.put(13, new Hero(13, "Bombasto"));
-        HEROES_MAP.put(14, new Hero(14, "Celeritas"));
-        HEROES_MAP.put(15, new Hero(15, "Magneta"));
-        HEROES_MAP.put(16, new Hero(16, "RubberMan"));
-        HEROES_MAP.put(17, new Hero(17, "Dynama"));
-        HEROES_MAP.put(18, new Hero(18, "Dr IQ"));
-        HEROES_MAP.put(19, new Hero(19, "Magma"));
-        HEROES_MAP.put(20, new Hero(20, "Tornado"));
-        LOG.debug("... finished!");
     }
 }
