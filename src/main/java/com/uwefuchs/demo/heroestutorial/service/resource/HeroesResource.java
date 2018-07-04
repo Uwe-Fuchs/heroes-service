@@ -22,12 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uwefuchs.demo.heroestutorial.service.model.Hero;
-import com.uwefuchs.demo.heroestutorial.service.service.HeroesCreatingService;
+import com.uwefuchs.demo.heroestutorial.service.helper.HeroesCreatingHelper;
 
 @Path("heroes")
 public class HeroesResource {
     private static final Logger LOG = LoggerFactory.getLogger(Hero.class);
-    private static final Map<Integer, Hero> HEROES_MAP = HeroesCreatingService.buildHeroesMap();
+    private static final Map<Integer, Hero> HEROES_MAP = HeroesCreatingHelper.buildHeroesMap();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ public class HeroesResource {
     		throw new WebApplicationException("heroes must have a name!", 400);
     	}
     	
-    	Hero newHero = new Hero(HeroesCreatingService.getNextId(), hero.getName());
+    	Hero newHero = new Hero(HeroesCreatingHelper.getNextId(), hero.getName());
     	
         LOG.debug("creating hero with id [{}] and name [{}]...", newHero.getId(), newHero.getName());        
         HEROES_MAP.put(newHero.getId(), newHero);
@@ -82,7 +82,10 @@ public class HeroesResource {
 				.path("heroes")
 				.path(Integer.toString(newHero.getId()));
         
-        return Response.created(uriBuilder.build()).build();
+        return Response
+            .created(uriBuilder.build())
+            .entity(newHero)
+            .build();
     }
 
     @DELETE

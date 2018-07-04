@@ -30,7 +30,7 @@
         </init-param>
         <init-param>
             <param-name>allowedHeaders</param-name>
-            <param-value>X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept</param-value>
+            <param-value>X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, Location</param-value>
         </init-param>
         <init-param>
             <param-name>maxAge</param-name>

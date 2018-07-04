@@ -1,4 +1,4 @@
-package com.uwefuchs.demo.heroestutorial.service.service;
+package com.uwefuchs.demo.heroestutorial.service.helper;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import com.uwefuchs.demo.heroestutorial.service.model.Hero;
 
-public class HeroesCreatingService {
+public class HeroesCreatingHelper {
 	private static volatile int heroId = 10;
-	private static final Logger LOG = LoggerFactory.getLogger(HeroesCreatingService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(HeroesCreatingHelper.class);
 
 	public static Map<Integer, Hero> buildHeroesMap() {
 	    Map<Integer, Hero> heroesMap = new LinkedHashMap<>();
