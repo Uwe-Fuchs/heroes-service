@@ -29,4 +29,8 @@ public class Hero implements Serializable {
     public String getName() {
         return this.name;
     }
+
+    public boolean nameContains(String sequence) {
+        return this.getName() != null && this.getName().toLowerCase().contains(sequence);
+    }
 }

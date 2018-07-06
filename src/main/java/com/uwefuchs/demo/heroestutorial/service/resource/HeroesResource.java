@@ -2,6 +2,10 @@ package com.uwefuchs.demo.heroestutorial.service.resource;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -12,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -46,6 +51,21 @@ public class HeroesResource {
     	
         LOG.debug("delivering hero with id [{}]...", id);
         return HEROES_MAP.get(id);
+    }
+
+    @GET
+    @Path("search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Hero> searchHeroesByName(@QueryParam("name") String name) {
+        LOG.debug("searching heroes by name [{}]...", name);
+
+        Set<Hero> result = new HashSet<>();
+        result.addAll(HEROES_MAP.values());        
+
+        return result
+            .stream()
+            .filter(h -> h.nameContains(name))
+            .collect(Collectors.toList());
     }
 
     @PUT
