@@ -75,6 +75,10 @@ public class HeroesResource {
     	if (!HEROES_MAP.containsKey(id)) {
     		throw new WebApplicationException(String.format("no hero found with id [%d]", id), 404);
     	}
+
+    	if (hero.getName() == null || "".equals(hero.getName())) {
+    		throw new WebApplicationException("heroes must have a name!", 400);
+    	}
     	
         LOG.debug("updating hero with id [{}]...", id);        
         HEROES_MAP.put(id, hero);

@@ -14,7 +14,8 @@ public class Hero implements Serializable {
 	private int id;
     private String name;
     
-    public Hero() {    	
+    // jackson
+    private Hero() {    	
     }
 
     public Hero (int id, String name) {
@@ -31,6 +32,9 @@ public class Hero implements Serializable {
     }
 
     public boolean nameContains(String sequence) {
-        return this.getName() != null && this.getName().toLowerCase().contains(sequence);
+        return sequence != null 
+            && "" != sequence.trim() 
+            && this.getName() != null 
+            && this.getName().trim().toLowerCase().contains(sequence.trim().toLowerCase());
     }
 }
